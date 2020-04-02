@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Confirmed Covid-19 Cases</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.7/d3.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
+  <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+  crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="wrapper">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="index.html" color=black>Dashboard
+            <img class="nav-germ" src="static/41368.svg">
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="titleimage"></div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline">
+          <div class="form-group">
+            <label class="form-label" for="countryInput"></label>
+            <input type="text" class="form-control" id="countryInput" placeholder="Enter a country">
+          </div>
+          <button id="submit" type="submit" class="btn btn-warning">Plot Country</button>
+        </form>
+        <div id="plot"></div>
+        <script src="plots.js" style="width: 1115px; height: 500px;"></script>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+<footer class="footer mt-auto py-3">
+  <div class="footercontainer">
+    <span class="text-muted" id="footer-text">Project by: Hayden Buss, Cara Roberts, Renata Sant'Anna, Kabao Xiong, and Nick Sain</span>
+    <p class="text-muted">Datasource: <a href = "https://covid19api.com/#" class="text-muted">Covid-19 API</a></p>
+  </div>
+</footer>
+
+</html>
