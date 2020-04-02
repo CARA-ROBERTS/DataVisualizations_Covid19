@@ -967,4 +967,123 @@ d3.json(alldataUrl , function(data) {
           recoveredLayer.addTo(map);  
       }
     });
+////////////////////////////////////////////iran//////////////////////////////////////
 
+    // Load in geojson data
+    var confirmedUrl= "https://api.covid19api.com/live/country/iran/status/confirmed";
+    var geojson;
+    // Grab data with d3 !!!!
+    d3.json(confirmedUrl , function(data) {
+      console.log(data);
+      for (var i = 0; i < data.length; i++) {
+          var color= "";
+          if (data[i].Cases > 50000){
+            var color= "red";
+          }
+          else if(data[i].Cases > 10000){
+            var color= "orange";
+          } 
+          else if(data[i].Cases > 5000){
+            var color= "yellow";
+          } 
+          else if(data[i].Cases > 1000){
+            var color= "purple";
+          } 
+          else if(data[i].Cases > 100){
+            var color= "blue";
+          } 
+          else if(data[i].Cases > 0){
+            var color= "green";
+          } 
+          else {
+            color= "white";
+          }  
+          L.circle([data[i].Lat,data[i].Lon], {
+          fillOpacity: 0.20,
+          color: color,
+          fillColor: color,
+          radius: data[i].Cases*10,
+          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
+          .addTo(confirmedLayer); 
+          confirmedLayer.addTo(map);  
+      }
+    });
+    // Load in geojson data
+    var deathsUrl= "https://api.covid19api.com/live/country/iran/status/deaths";
+    var geojson;
+    // Grab data with d3 !!!!
+    d3.json(deathsUrl , function(data) {
+      console.log(data);
+      for (var i = 0; i < data.length; i++) {
+          var color= "";
+          if (data[i].Cases > 50000){
+            var color= "red";
+          }
+          else if(data[i].Cases > 10000){
+            var color= "orange";
+          } 
+          else if(data[i].Cases > 5000){
+            var color= "yellow";
+          } 
+          else if(data[i].Cases > 1000){
+            var color= "purple";
+          } 
+          else if(data[i].Cases > 100){
+            var color= "blue";
+          } 
+          else if(data[i].Cases > 0){
+            var color= "green";
+          } 
+          else {
+            color= "white";
+          }  
+          L.circle([data[i].Lat,data[i].Lon], {
+          fillOpacity: 0.20,
+          color: color,
+          fillColor: color,
+          radius: data[i].Cases*10,
+          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
+          .addTo(deathsLayer); 
+          deathsLayer.addTo(map);  
+      }
+    });
+   
+    // Load in geojson data
+    var recoveredUrl= "https://api.covid19api.com/live/country/iran/status/recovered";
+    var geojson;
+    // Grab data with d3 !!!!
+    d3.json(recoveredUrl , function(data) {
+      console.log(data);
+      for (var i = 0; i < data.length; i++) {
+          var color= "";
+          if (data[i].Cases > 50000){
+            var color= "red";
+          }
+          else if(data[i].Cases > 10000){
+            var color= "orange";
+          } 
+          else if(data[i].Cases > 5000){
+            var color= "yellow";
+          } 
+          else if(data[i].Cases > 1000){
+            var color= "purple";
+          } 
+          else if(data[i].Cases > 100){
+            var color= "blue";
+          } 
+          else if(data[i].Cases > 0){
+            var color= "green";
+          } 
+          else {
+            color= "white";
+          }  
+          L.circle([data[i].Lat,data[i].Lon], {
+          fillOpacity: 0.20,
+          color: color,
+          fillColor: color,
+          radius: data[i].Cases*10,
+          }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
+          .addTo(recoveredLayer); 
+          recoveredLayer.addTo(map);  
+      }
+    });
