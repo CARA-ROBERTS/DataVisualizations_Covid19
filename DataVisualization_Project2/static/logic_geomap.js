@@ -26,8 +26,9 @@ var greenMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png
 var confirmedLayer = new L.layerGroup();
 var recoveredLayer = new L.layerGroup();
 var deathsLayer = new L.layerGroup(); 
-var detailconfirmedLayer = new L.layerGroup();
-var alldataLayer = new L.layerGroup();
+var activeLayer = new L.layerGroup();
+var alldataLayer= new L.layerGroup();
+
 // base layers
 var baseMaps = {
     "Street Map": greenMap,
@@ -40,36 +41,36 @@ var overlayMaps = {
     "Confirmed": confirmedLayer,
     "Recovered": recoveredLayer,
     "Deaths": deathsLayer,
-    "Detailed Confirmed US":detailconfirmedLayer,
-    "All Data Layer":alldataLayer
+    "Active":activeLayer,
+    "All Confrimed Data Points": alldataLayer
   };
 // add control
 L.control.layers(baseMaps,overlayMaps).addTo(map);
-///////////////////////////////// All Data////////////////////////////////////
+///////////////////////////////// All Confirmed Data////////////////////////////////////
 // Load in geojson data
-var alldataUrl= "https://api.covid19api.com/all";
+var dataUrl= "https://api.covid19api.com/all";
 var geojson;
 // Grab data with d3 CONFIRMED!!!!
-d3.json(alldataUrl , function(data) {
+d3.json(dataUrl , function(data) {
   console.log(data);
   for (var i = 0; i < data.length; i++) {
       var color= "";
-      if (data[i].Cases > 50000){
+      if (data[i].Confirmed > 50000){
         var color= "red";
       }
-      else if(data[i].Cases > 10000){
+      else if(data[i].Confirmed > 10000){
         var color= "orange";
       } 
-      else if(data[i].Cases > 5000){
+      else if(data[i].Confirmed> 5000){
         var color= "yellow";
       } 
-      else if(data[i].Cases > 1000){
+      else if(data[i].Confirmed > 1000){
         var color= "purple";
       } 
-      else if(data[i].Cases > 100){
+      else if(data[i].Confirmed > 100){
         var color= "blue";
       } 
-      else if(data[i].Cases > 0){
+      else if(data[i].Confirmed > 0){
         var color= "green";
       } 
       else {
@@ -79,1011 +80,1350 @@ d3.json(alldataUrl , function(data) {
       fillOpacity: 0.20,
       color: color,
       fillColor: color,
-      radius: data[i].Cases*10,
-      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Cases: " + data[i].Cases + "</h3>")
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
       .addTo(alldataLayer); 
-     alldataLayer.addTo(map);  
+      alldataLayer.addTo(map);  
+  }
+ });
+
+////////////////////////////////us//////////////////////////////////////////////////////
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/us/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
+      }
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
+ });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
   }
 });
-////////////////////////////// detailed  US/////////////////////////////////////////////
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
+//     ////////////////////////////////////////////// Spain/////////////////////////////////////////////////////
 // Load in geojson data
-  var detailconfirmedUrl= "https://api.covid19api.com/country/us/status/confirmed";
-  var geojson;
-  // Grab data with d3 CONFIRMED!!!!
-  d3.json(detailconfirmedUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-        .addTo(detailconfirmedLayer); 
-        detailconfirmedLayer.addTo(map);  
-    }
-  });
-  /////////////////////////////// U S//////////////////////////////////////////////////////////////
-    // Load in geojson data
-    var confirmedUrl= "https://api.covid19api.com/live/country/US/status/confirmed";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(confirmedUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-          .addTo(confirmedLayer); 
-          confirmedLayer.addTo(map);  
+var alldataUrl= "https://api.covid19api.com/live/country/spain/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
       }
-    });
-    // Load in geojson data
-    var deathsUrl= "https://api.covid19api.com/live/country/US/status/deaths";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(deathsUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*20,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-          .addTo(deathsLayer); 
-          deathsLayer.addTo(map);  
-      }
-    });
-
-    // Load in geojson data
-    var recoveredUrl= "https://api.covid19api.com/live/country/US/status/recovered";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(recoveredUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-          .addTo(recoveredLayer); 
-          recoveredLayer.addTo(map);  
-      }
-    });
-
-    ////////////////////////////////////////////// Spain/////////////////////////////////////////////////////
-    // Load in geojson data
-    var confirmedUrl= "https://api.covid19api.com/live/country/spain/status/confirmed";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(confirmedUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-          .addTo(confirmedLayer); 
-          confirmedLayer.addTo(map);  
-      }
-    });
-    // Load in geojson data
-    var deathsUrl= "https://api.covid19api.com/live/country/spain/status/deaths";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(deathsUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-          .addTo(deathsLayer); 
-          deathsLayer.addTo(map);  
-      }
-    });
-
-    // Load in geojson data
-    var recoveredUrl= "https://api.covid19api.com/live/country/spain/status/recovered";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(recoveredUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-          .addTo(recoveredLayer); 
-          recoveredLayer.addTo(map);  
-      }
-    });
-
-//////////////////////////////// united-kingdom ///////////////////////////////////////////////
- // Load in geojson data
- var confirmedUrl= "https://api.covid19api.com/live/country/united-kingdom/status/confirmed";
- var geojson;
- // Grab data with d3 !!!!
- d3.json(confirmedUrl , function(data) {
-   console.log(data);
-   for (var i = 0; i < data.length; i++) {
-       var color= "";
-       if (data[i].Cases > 50000){
-         var color= "red";
-       }
-       else if(data[i].Cases > 10000){
-         var color= "orange";
-       } 
-       else if(data[i].Cases > 5000){
-         var color= "yellow";
-       } 
-       else if(data[i].Cases > 1000){
-         var color= "purple";
-       } 
-       else if(data[i].Cases > 100){
-         var color= "blue";
-       } 
-       else if(data[i].Cases > 0){
-         var color= "green";
-       } 
-       else {
-         color= "white";
-       }  
-       L.circle([data[i].Lat,data[i].Lon], {
-       fillOpacity: 0.20,
-       color: color,
-       fillColor: color,
-       radius: data[i].Cases*10,
-       }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-       .addTo(confirmedLayer); 
-       confirmedLayer.addTo(map);  
-   }
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
  });
- // Load in geojson data
- var deathsUrl= "https://api.covid19api.com/live/country/united-kingdom/status/deaths";
- var geojson;
- // Grab data with d3 !!!!
- d3.json(deathsUrl , function(data) {
-   console.log(data);
-   for (var i = 0; i < data.length; i++) {
-       var color= "";
-       if (data[i].Cases > 50000){
-         var color= "red";
-       }
-       else if(data[i].Cases > 10000){
-         var color= "orange";
-       } 
-       else if(data[i].Cases > 5000){
-         var color= "yellow";
-       } 
-       else if(data[i].Cases > 1000){
-         var color= "purple";
-       } 
-       else if(data[i].Cases > 100){
-         var color= "blue";
-       } 
-       else if(data[i].Cases > 0){
-         var color= "green";
-       } 
-       else {
-         color= "white";
-       }  
-       L.circle([data[i].Lat,data[i].Lon], {
-       fillOpacity: 0.20,
-       color: color,
-       fillColor: color,
-       radius: data[i].Cases*10,
-       }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-       .addTo(deathsLayer); 
-       deathsLayer.addTo(map);  
-   }
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
+
+// //////////////////////////////// united-kingdom ///////////////////////////////////////////////
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/united-kingdom/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
+      }
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
  });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
+//  //////////////////////////////////// france//////////////////////////////////////////////////////////////
 
- // Load in geojson data
- var recoveredUrl= "https://api.covid19api.com/live/country/united-kingdom/status/recovered";
- var geojson;
- // Grab data with d3 !!!!
- d3.json(recoveredUrl , function(data) {
-   console.log(data);
-   for (var i = 0; i < data.length; i++) {
-       var color= "";
-       if (data[i].Cases > 50000){
-         var color= "red";
-       }
-       else if(data[i].Cases > 10000){
-         var color= "orange";
-       } 
-       else if(data[i].Cases > 5000){
-         var color= "yellow";
-       } 
-       else if(data[i].Cases > 1000){
-         var color= "purple";
-       } 
-       else if(data[i].Cases > 100){
-         var color= "blue";
-       } 
-       else if(data[i].Cases > 0){
-         var color= "green";
-       } 
-       else {
-         color= "white";
-       }  
-       L.circle([data[i].Lat,data[i].Lon], {
-       fillOpacity: 0.20,
-       color: color,
-       fillColor: color,
-       radius: data[i].Cases*10,
-       }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-       .addTo(recoveredLayer); 
-       recoveredLayer.addTo(map);  
-   }
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/france/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
+      }
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
  });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
 
- //////////////////////////////////// france//////////////////////////////////////////////////////////////
 
-  // Load in geojson data
-  var confirmedUrl= "https://api.covid19api.com/live/country/france/status/confirmed";
-  var geojson;
-  // Grab data with d3 !!!!
-  d3.json(confirmedUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-        .addTo(confirmedLayer); 
-        confirmedLayer.addTo(map);  
-    }
-  });
-  // Load in geojson data
-  var deathsUrl= "https://api.covid19api.com/live/country/france/status/deaths";
-  var geojson;
-  // Grab data with d3 !!!!
-  d3.json(deathsUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-        .addTo(deathsLayer); 
-        deathsLayer.addTo(map);  
-    }
-  });
- 
-  // Load in geojson data
-  var recoveredUrl= "https://api.covid19api.com/live/country/france/status/recovered";
-  var geojson;
-  // Grab data with d3 !!!!
-  d3.json(recoveredUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-        .addTo(recoveredLayer); 
-        recoveredLayer.addTo(map);  
-    }
-  });
+//   ///////////////////////////////// china ////////////////////////////////
 
-//////////////////////////////italy//////////////////////////////////////////
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/china/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
+      }
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
+ });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
+// ////////////////////////////////////////////germany//////////////////////////////////////
 
-  // Load in geojson data
-  var confirmedUrl= "https://api.covid19api.com/live/country/italy/status/confirmed";
-  var geojson;
-  // Grab data with d3 !!!!
-  d3.json(confirmedUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-        .addTo(confirmedLayer); 
-        confirmedLayer.addTo(map);  
-    }
-  });
-  // Load in geojson data
-  var deathsUrl= "https://api.covid19api.com/live/country/italy/status/deaths";
-  var geojson;
-  // Grab data with d3 !!!!
-  d3.json(deathsUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-        .addTo(deathsLayer); 
-        deathsLayer.addTo(map);  
-    }
-  });
- 
-  // Load in geojson data
-  var recoveredUrl= "https://api.covid19api.com/live/country/italy/status/recovered";
-  var geojson;
-  // Grab data with d3 !!!!
-  d3.json(recoveredUrl , function(data) {
-    console.log(data);
-    for (var i = 0; i < data.length; i++) {
-        var color= "";
-        if (data[i].Cases > 50000){
-          var color= "red";
-        }
-        else if(data[i].Cases > 10000){
-          var color= "orange";
-        } 
-        else if(data[i].Cases > 5000){
-          var color= "yellow";
-        } 
-        else if(data[i].Cases > 1000){
-          var color= "purple";
-        } 
-        else if(data[i].Cases > 100){
-          var color= "blue";
-        } 
-        else if(data[i].Cases > 0){
-          var color= "green";
-        } 
-        else {
-          color= "white";
-        }  
-        L.circle([data[i].Lat,data[i].Lon], {
-        fillOpacity: 0.20,
-        color: color,
-        fillColor: color,
-        radius: data[i].Cases*10,
-        }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-        .addTo(recoveredLayer); 
-        recoveredLayer.addTo(map);  
-    }
-  });
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/germany/tatus/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
+      }
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
+ });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
 
-  ///////////////////////////////// china ////////////////////////////////
+// ////////////////////////////////////////////iran//////////////////////////////////////
 
-    // Load in geojson data
-    var confirmedUrl= "https://api.covid19api.com/live/country/china/status/confirmed";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(confirmedUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-          .addTo(confirmedLayer); 
-          confirmedLayer.addTo(map);  
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/iran/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
       }
-    });
-    // Load in geojson data
-    var deathsUrl= "https://api.covid19api.com/live/country/china/status/deaths";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(deathsUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-          .addTo(deathsLayer); 
-          deathsLayer.addTo(map);  
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
+ });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
       }
-    });
-   
-    // Load in geojson data
-    var recoveredUrl= "https://api.covid19api.com/live/country/china/status/recovered";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(recoveredUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-          .addTo(recoveredLayer); 
-          recoveredLayer.addTo(map);  
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
       }
-    });
-////////////////////////////////////////////germany//////////////////////////////////////
-
-    // Load in geojson data
-    var confirmedUrl= "https://api.covid19api.com/live/country/germany/status/confirmed";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(confirmedUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-          .addTo(confirmedLayer); 
-          confirmedLayer.addTo(map);  
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
       }
-    });
-    // Load in geojson data
-    var deathsUrl= "https://api.covid19api.com/live/country/germany/status/deaths";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(deathsUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-          .addTo(deathsLayer); 
-          deathsLayer.addTo(map);  
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
+/////////////////////////////////////////////italy////////////////////////////////////////////////////
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/italy/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
       }
-    });
-   
-    // Load in geojson data
-    var recoveredUrl= "https://api.covid19api.com/live/country/germany/status/recovered";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(recoveredUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-          .addTo(recoveredLayer); 
-          recoveredLayer.addTo(map);  
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
+ });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
       }
-    });
-////////////////////////////////////////////iran//////////////////////////////////////
-
-    // Load in geojson data
-    var confirmedUrl= "https://api.covid19api.com/live/country/iran/status/confirmed";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(confirmedUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Cases + "</h3>")
-          .addTo(confirmedLayer); 
-          confirmedLayer.addTo(map);  
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
       }
-    });
-    // Load in geojson data
-    var deathsUrl= "https://api.covid19api.com/live/country/iran/status/deaths";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(deathsUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Cases + "</h3>")
-          .addTo(deathsLayer); 
-          deathsLayer.addTo(map);  
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
       }
-    });
-   
-    // Load in geojson data
-    var recoveredUrl= "https://api.covid19api.com/live/country/iran/status/recovered";
-    var geojson;
-    // Grab data with d3 !!!!
-    d3.json(recoveredUrl , function(data) {
-      console.log(data);
-      for (var i = 0; i < data.length; i++) {
-          var color= "";
-          if (data[i].Cases > 50000){
-            var color= "red";
-          }
-          else if(data[i].Cases > 10000){
-            var color= "orange";
-          } 
-          else if(data[i].Cases > 5000){
-            var color= "yellow";
-          } 
-          else if(data[i].Cases > 1000){
-            var color= "purple";
-          } 
-          else if(data[i].Cases > 100){
-            var color= "blue";
-          } 
-          else if(data[i].Cases > 0){
-            var color= "green";
-          } 
-          else {
-            color= "white";
-          }  
-          L.circle([data[i].Lat,data[i].Lon], {
-          fillOpacity: 0.20,
-          color: color,
-          fillColor: color,
-          radius: data[i].Cases*10,
-          }).bindPopup("<h1>" + data[i].Country + data[i].Province + "</h1> <hr> <h3>Recovered: " + data[i].Cases + "</h3>")
-          .addTo(recoveredLayer); 
-          recoveredLayer.addTo(map);  
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
+///////////////////////////////////////russia////////////////////////////////////////////////////
+// Load in geojson data
+var alldataUrl= "https://api.covid19api.com/live/country/russia/status/confirmed'";
+var geojson;
+// Grab data with d3 CONFIRMED!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Confirmed > 50000){
+        var color= "red";
       }
-    });
+      else if(data[i].Confirmed > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Confirmed> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Confirmed > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Confirmed > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Confirmed > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Confirmed*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Confirmed: " + data[i].Confirmed + "</h3>")
+      .addTo(confirmedLayer); 
+      confirmedLayer.addTo(map);  
+  }
+ });
+// Grab data with d3 Recovered!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Recovered > 50000){
+        var color= "red";
+      }
+      else if(data[i].Recovered > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Recovered> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Recovered > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Recovered > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Recovered > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Recovered*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Recovered: " + data[i].Recovered + "</h3>")
+      .addTo(recoveredLayer); 
+      recoveredLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Deaths!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Deaths > 50000){
+        var color= "red";
+      }
+      else if(data[i].Deaths > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Deaths> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Deaths > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Deaths > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Deaths > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Deaths*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Deaths: " + data[i].Deaths + "</h3>")
+      .addTo(deathsLayer); 
+      deathsLayer.addTo(map);  
+  }
+});
+// Grab data with d3 Active!!!!
+d3.json(alldataUrl , function(data) {
+  console.log(data);
+  for (var i = 0; i < data.length; i++) {
+      var color= "";
+      if (data[i].Active > 50000){
+        var color= "red";
+      }
+      else if(data[i].Active > 10000){
+        var color= "orange";
+      } 
+      else if(data[i].Active> 5000){
+        var color= "yellow";
+      } 
+      else if(data[i].Active > 1000){
+        var color= "purple";
+      } 
+      else if(data[i].Active > 100){
+        var color= "blue";
+      } 
+      else if(data[i].Active > 0){
+        var color= "green";
+      } 
+      else {
+        color= "white";
+      }  
+      L.circle([data[i].Lat,data[i].Lon], {
+      fillOpacity: 0.20,
+      color: color,
+      fillColor: color,
+      radius: data[i].Active*3,
+      }).bindPopup("<h1>" + data[i].Province + data[i].Country + "</h1> <hr> <h3>Active: " + data[i].Active + "</h3>")
+      .addTo(activeLayer); 
+      activeLayer.addTo(map);  
+  }
+});
