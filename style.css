@@ -1,0 +1,91 @@
+.footercontainer {
+    width: auto;
+    max-width: 680px;
+    padding: 0 15px;
+}
+  
+.footer {
+    background-color: #f5f5f5;
+    min-height: 40px;
+}
+
+.map{
+    box-shadow:1100px 1100px 1100px 1100px rgba(0, 0, 0, 0.2);
+}
+
+.titleimage {
+    position: relative;
+    height: 550px;
+    padding: 20px;
+    margin: 0;
+    background: black;
+    background-image: url("/static/redtitle.jpg");
+    background-attachment: fixed;
+    background-position: bottom center;
+    background-size: cover;
+  }
+
+#table-area td {
+    text-align: center;
+    font-family: Charcoal, sans-serif;
+  }
+
+#table-area th {
+    text-align: center;
+    font-family: Charcoal, sans-serif;
+  }
+
+.nav-germ {
+    position: absolute;
+    bottom: 10px;
+    left: 130px;
+    width: 40px;
+    color: white;
+    opacity: 0.5;
+  }
+
+  .nav-germ1{
+    position: absolute;
+    bottom: 10px;
+    left: 185px;
+    width: 40px;
+    color: white;
+    opacity: 0.5;
+  }
+  .wrapper {
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 130px;
+    overflow: auto;
+  }
+
+  a{
+      color: black;
+  }
+
+  .map-text{
+    text-align: center;
+    padding-top: 15px;
+    font-family: Charcoal, sans-serif;
+  }
+
+  .leaflet-popup-content {
+    text-align: center;
+  }
+
+#footer-text{
+  text-align: center;
+}
+
+.form-inline{
+  padding-top: 20px;
+  position: relative;
+}
+
+.form-label{
+  text-align: center;
+}
+
+.form-control{
+  text-align: center;
+}
